@@ -173,4 +173,4 @@ function random(arr) {
 }
 
 
-export {Game, PATTERNS, random};
+export {Game, PATTERNS, findTraps, random};
