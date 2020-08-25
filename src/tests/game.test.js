@@ -3,17 +3,15 @@ import { Game, PATTERNS, findTraps } from '../game';
 
 describe('findTraps', () => {
 	const patterns = [
-		[0, 1, 2],
-		[3, 4, 5],
-		[1, 6, 7],
-		[8, 9, 2],
+		[0, 1],
+		[2, 4],
+		[1, 7],
+		[8, 2],
 	]
 
 	test('returns all repeated ids', () => {
 		const traps = findTraps(patterns);
-		expect(traps).toContain(1);
-		expect(traps).toContain(2);
-		expect(traps.length).toBe(2);
+		expect(traps).toEqual([1, 2]);
 	});
 });
 
@@ -65,5 +63,41 @@ describe('Game', () => {
 		});
 	});
 
-	
+	describe('evaluateBoard', () => {	
+		test('finds winning move', () => {
+			const game = new Game();
+			game.player1.patterns = [[0]];
+			game.player2.patterns = [[1]];
+			expect(game.evaluateBoard(game.player1)).toBe(0);
+		});
+
+		test('blocks opponent winning move', () => {
+			const game = new Game();
+			game.player1.patterns = [[0, 1]];
+			game.player2.patterns = [[2]];
+			expect(game.evaluateBoard(game.player1)).toBe(2);
+		});
+
+		test('plays a trap if possible', () => {
+			const game = new Game();
+			game.player1.patterns = [[0, 1], [0, 3]];
+			game.player2.patterns = [[2, 4], [2, 6]];
+			expect(game.evaluateBoard(game.player1)).toBe(0);
+		});
+
+		test('blocks opponent trap if there is only one', () => {
+			const game = new Game();
+			game.player1.patterns = [[0, 1], [5, 7]];
+			game.player2.patterns = [[2, 4], [2, 6]];
+			expect(game.evaluateBoard(game.player1)).toBe(2);
+		});
+
+		test("if multiple opponent traps, plays a safe forcing move", () => {
+			const game = new Game();
+			game.player1.patterns = [[1, 4], [5, 7]];
+			game.player2.patterns = [[0, 5], [5, 8], [2, 4], [2, 6]];
+			expect([1, 4, 5]).toContain(game.evaluateBoard(game.player1));
+		});
+	});
+
 });
