@@ -86,6 +86,10 @@ class Game {
 			return random(tempoMoves);
 		}
 
+		if (player.patterns.length > 0) {
+			return random(random(player.patterns));
+		}
+
 		return random(this.squares);
 	}
 }
