@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 import {Game, random} from './game';
-
 import Scoreboard from './components/Scoreboard';
 import Board from './components/Board';
 import Btn from './components/Btn';

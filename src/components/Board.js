@@ -15,7 +15,7 @@ class Board extends React.Component {
 		}
 	}
 
-	highlight(id) {
+	isHighlighted(id) {
 		if (this.props.gameState === null) {
 			return (id % 3 === 0);
 		}
@@ -41,7 +41,7 @@ class Board extends React.Component {
 									 id={id}
 									 key={id} 
 									 value={this.mapValues(id)}
-									 highlighted={this.highlight(id)}
+									 highlighted={this.isHighlighted(id)}
 									 onClick={() => this.props.onClick(id)}
 								 />
 				})}

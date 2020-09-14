@@ -3,7 +3,10 @@ import React from 'react';
 
 class Btn extends React.Component {
 	getClassList() {
-		let classList = "button" + this.props.classList;
+		let classList = "button";
+		if (this.props.classList) {
+			classList += this.props.classList;
+		}
 		if (this.props.isSelected) {
 			classList += " is-selected";
 		}
