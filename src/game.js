@@ -1,4 +1,4 @@
-const PATTERNS = [
+export const PATTERNS = [
 									 [0, 1, 2],
 									 [3, 4, 5],
 									 [6, 7, 8],
@@ -10,7 +10,7 @@ const PATTERNS = [
 								 ]
 
 
-class Game {
+export class Game {
 	constructor() {
 		this.squares = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 		this.patterns = PATTERNS.map(p => p.slice());
@@ -93,33 +93,34 @@ class Game {
 			return random(random(player.patterns));
 		}
 
+		if (opp.patterns.length > 0) {
+			return random(random(opp.patterns));
+		}
+
 		return random(this.squares);
 	}
 }
 
 
-function findTraps(patterns) {
-	const ids = {};
+export function findTraps(patterns) {
+	const counter = {};
 	patterns.forEach(pattern => {
 		pattern.forEach(id => {
-			ids[id] = (ids[id] || 0) + 1;
+			counter[id] = (counter[id] || 0) + 1;
 		});
 	});
-	return Object.keys(ids)
-		.filter(id => ids[id] > 1)
+	return Object.keys(counter)
+		.filter(id => counter[id] > 1)
 		.map(id => parseInt(id));
 }
 
 
-function removeFromArr(element, arr) {
+export function removeFromArr(element, arr) {
 	arr.splice(arr.indexOf(element), 1);
 }
 
 
-function random(arr) {
+export function random(arr) {
 	const i = Math.floor(Math.random() * Math.floor(arr.length));
 	return arr[i];
 }
-
-
-export {Game, PATTERNS, findTraps, random};
