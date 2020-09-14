@@ -40,12 +40,12 @@ test("is disabled during the game", () => {
 		render(<Btn />, container);
 	});
 	let btn = container.querySelector('button');
-	expect(btn.attributes["disabled"]).toBe(undefined);
+	expect(btn.getAttribute('disabled')).toBe(null);
 
 	act(() => {
 		render(<Btn gameState="playing" />, container);
 	});
-	expect(btn.attributes["disabled"]["specified"]).toBe(true);
+	expect(btn.getAttribute('disabled')).toBe('');
 });
 
 
