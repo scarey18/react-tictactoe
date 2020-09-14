@@ -54,10 +54,6 @@ class Game {
 	}
 
 	evaluateBoard(player) {
-		if (this.squares.length === 8) {
-			return this.squares.includes(4) ? 4 : random([0, 2, 6, 8]);
-		}
-
 		const opp = player === this.player1 ? this.player2 : this.player1;
 		for (const patterns of [player.patterns, opp.patterns]) {
 			const winningMoves = patterns.filter(p => p.length === 1);
@@ -72,8 +68,7 @@ class Game {
 		const oppTraps = findTraps(opp.patterns);
 		if (oppTraps.length === 1) {
 			return random(oppTraps);
-		}
-		else if (oppTraps.length > 1) {
+		} else if (oppTraps.length > 1) {
 			const safeMoves = [];
 			player.patterns.forEach(pattern => {
 				pattern.forEach(a => {
@@ -86,84 +81,26 @@ class Game {
 			return random(safeMoves);
 		}
 
-		return this.scoreAllMoves(player);
-	}
-
-	scoreAllMoves(player) {
-		let bestMoves = [];
-		let maxScore = -2;
-		this.squares.forEach(id => {
-			const score = this.simulateMove(player, id);
-			if (score > maxScore) {
-				bestMoves = [id];
-				maxScore = score;
-			}
-			else if (score === maxScore) {
-				bestMoves.push(id);
-			}
-		});
-		return random(bestMoves);
-	}
-
-	simulateMove(player, id) {
-		const opp = player === this.player1 ? this.player2 : this.player1;
-		const gameClone = this.createClone(player, opp);
-		const playerClone = gameClone.player1;
-		const oppClone = gameClone.player2;
-
-		let currentPlayer = playerClone;
-		let currentOpp = oppClone;
-		let gameState = gameClone.makeMove(playerClone, id);
-		while (!gameState) {
-			currentPlayer = currentPlayer === playerClone ? oppClone : playerClone;
-			currentOpp = currentOpp === playerClone ? oppClone : playerClone;
-			const move = gameClone.evaluateBoard(currentPlayer);
-			gameState = gameClone.makeMove(currentPlayer, move);
+		const tempoMoves = findTraps(player.patterns.concat(opp.patterns));
+		if (tempoMoves.length > 0) {
+			return random(tempoMoves);
 		}
 
-		if (gameState === 'draw') {
-			return 0;
-		}
-		else if (gameState === playerClone.alias) {
-			return 1;
-		}
-		else {
-			return -1;
-		}
-	}
-
-	createClone(player, opp) {
-		const clone = new Game();
-		clone.squares = this.squares.slice();
-		clone.firstMove = this.firstMove;
-		clone.patterns = this.patterns.map(p => p.slice());
-		clone.player1 = {
-			alias: player.alias,
-			patterns: player.patterns.map(p => p.slice()),
-		}
-		clone.player2 = {
-			alias: opp.alias,
-			patterns: opp.patterns.map(p => p.slice()),
-		}
-		return clone;
+		return random(this.squares);
 	}
 }
 
 
 function findTraps(patterns) {
-	const ids = [];
-	const repeatedIds = [];
+	const ids = {};
 	patterns.forEach(pattern => {
 		pattern.forEach(id => {
-			if (!ids.includes(id)) {
-				ids.push(id);
-			}
-			else if (!repeatedIds.includes(id)) {
-				repeatedIds.push(id);
-			}
+			ids[id] = (ids[id] || 0) + 1;
 		});
 	});
-	return repeatedIds;
+	return Object.keys(ids)
+		.filter(id => ids[id] > 1)
+		.map(id => parseInt(id));
 }
 
 
