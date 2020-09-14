@@ -25,11 +25,11 @@ class Game {
 	}
 
 	makeMove(player, id) {
-		this.squares.splice(this.squares.indexOf(id), 1);
+		removeFromArr(id, this.squares);
 
 		const playerPatterns = player.patterns.filter(p => p.includes(id));
 		for (const pattern of playerPatterns) {
-			pattern.splice(pattern.indexOf(id), 1);
+			removeFromArr(id, pattern);
 			if (pattern.length === 0) {
 				return player.alias;
 			}
@@ -41,23 +41,26 @@ class Game {
 		
 		const unownedPatterns = this.patterns.filter(p => p.includes(id));
 		unownedPatterns.forEach(pattern => {
-			pattern.splice(pattern.indexOf(id), 1);
-			this.patterns.splice(this.patterns.indexOf(pattern), 1);
+			removeFromArr(id, pattern);
+			removeFromArr(pattern, this.patterns);
 			player.patterns.push(pattern);
 		});
 
 		const opp = player === this.player1 ? this.player2 : this.player1;
 		const oppPatterns = opp.patterns.filter(p => p.includes(id));
 		oppPatterns.forEach(pattern => {
-			opp.patterns.splice(opp.patterns.indexOf(pattern), 1);
+			removeFromArr(pattern, opp.patterns);
 		});
 	}
 
 	evaluateBoard(player) {
 		const opp = player === this.player1 ? this.player2 : this.player1;
+
 		for (const patterns of [player.patterns, opp.patterns]) {
 			const winningMoves = patterns.filter(p => p.length === 1);
-			if (winningMoves.length > 0) return random(winningMoves)[0];
+			if (winningMoves.length > 0) {
+				return random(winningMoves)[0];
+			}
 		}
 
 		const playerTraps = findTraps(player.patterns);
@@ -105,6 +108,11 @@ function findTraps(patterns) {
 	return Object.keys(ids)
 		.filter(id => ids[id] > 1)
 		.map(id => parseInt(id));
+}
+
+
+function removeFromArr(element, arr) {
+	arr.splice(arr.indexOf(element), 1);
 }
 
 
