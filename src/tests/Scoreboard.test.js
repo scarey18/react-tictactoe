@@ -31,11 +31,11 @@ test("renders all props correctly", () => {
 		), container)
 	});
 
-	let header = container.querySelector('h1');
+	let message = container.querySelector('#message');
 	let playerScore = container.querySelector('#player-score');
 	let cpuScore = container.querySelector('#cpu-score');
 
-	expect(header.textContent).toBe('Welcome!');
+	expect(message.textContent).toBe('Welcome!');
 	expect(playerScore.textContent).toBe('0');
 	expect(cpuScore.textContent).toBe('1');
 
@@ -49,7 +49,7 @@ test("renders all props correctly", () => {
 		), container)
 	});
 
-	expect(header.textContent).toBe('You are X');
+	expect(message.textContent).toBe('You are X');
 	expect(playerScore.textContent).toBe('1');
 	expect(cpuScore.textContent).toBe('3');
 });
