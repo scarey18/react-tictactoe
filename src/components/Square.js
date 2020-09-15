@@ -18,7 +18,8 @@ class Square extends React.Component {
 
 	render() {
 		return (
-			<div 
+			<div
+				id={"cell-" + this.props.id} 
 				className={this.getClassList()} 
 				onClick={() => this.props.onClick()}
 			>

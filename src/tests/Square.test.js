@@ -19,19 +19,7 @@ afterEach(() => {
 });
 
 
-test("renders with correct value", () => {
-
-	act(() => {
-		render(<Square value="X" />, container);
-	});
-	let square = container.querySelector('div');
-	expect(square.textContent).toBe("X");
-
-	act(() => {
-		render(<Square />, container);
-	});
-	expect(square.textContent).toBe("");
-});
+// Values and highlighting are tested in Board tests
 
 
 test("has no bottom border if id is less than 6", () => {
@@ -61,19 +49,4 @@ test("has no right border if id isn't 2, 5, or 8", () => {
 		render(<Square id={5} />, container);
 	});
 	expect(square.classList).not.toContain('no-right-border');
-});
-
-
-test("adds highlighted class when appropriate", () => {
-
-	act(() => {
-		render(<Square highlighted />, container);
-	});
-	let square = container.querySelector('div');
-	expect(square.classList).toContain('highlighted');
-
-	act(() => {
-		render(<Square />, container);
-	});
-	expect(square.classList).not.toContain('highlighted');
 });
