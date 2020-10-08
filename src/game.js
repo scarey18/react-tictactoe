@@ -93,8 +93,12 @@ export class Game {
 			return random(random(player.patterns));
 		}
 
-		if (opp.patterns.length > 0) {
-			return random(random(opp.patterns));
+		if (opp.patterns.length > 0 && 
+			this.squares.length > 7) {
+			const filtered = opp.patterns.reduce((acc, pattern) => {
+				return acc.concat(pattern.filter(n => ![1, 3, 5, 7].includes(n)))
+			}, []);
+			return random(filtered);
 		}
 
 		return random(this.squares);
